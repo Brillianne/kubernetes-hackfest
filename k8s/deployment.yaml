@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: data-api
+  name: data-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-api
+  template:
+    metadata:
+      labels:
+        app: data-api
+    spec:
+      containers:
+      - image: acrpetclinic536f0e.azurecr.io/data-api:latest
+        name: data-api
+        env:
+        - name: "CONFIG_SERVER_URL"
+          valueFrom:
+            configMapKeyRef:
+              name: data-api
+              key: CONFIG_SERVER_URL
+        imagePullPolicy: Always
+#        livenessProbe:
+#          failureThreshold: 3
+#          httpGet:
+#            path: /actuator/health
+#            port: 8888
+#            scheme: HTTP
+#          initialDelaySeconds: 180
+#          successThreshold: 1
+        ports:
+        - containerPort: 8888
+          name: http
+          protocol: TCP
+        - containerPort: 9779
+          name: prometheus
+          protocol: TCP
+        - containerPort: 8778
+          name: jolokia
+          protocol: TCP
+        securityContext:
+          privileged: false
+   
+   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: data-api
+  name: data-api
+spec:
+  ports:
+  - port: 8888
+    protocol: TCP
+    targetPort: 8888
+  selector:
+    app: data-api
+  type: ClusterIP

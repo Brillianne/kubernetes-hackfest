@@ -1,3 +1,4 @@
+require('dotenv').config()
 const bodyParser = require('body-parser');
 const createError = require('http-errors');
 const dayjs = require('dayjs');
@@ -52,14 +53,24 @@ var mongoConnectString = mongoPrefix.concat(user,`:`,password,`@`,mongoUri,`:`,m
 
 if (process.env.NODE_ENV != 'local') {
   mongoose.connect(
-    mongoConnectString
+    mongoUri
     );
 } else {
   mongoose.connect(
-    'mongodb://localhost/demo:27017',
-    { useNewUrlParser: true }
+    mongoUri,
+    {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true}
   );
 }
+
+// mongoose.connect(mongoUri, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }, (err, res) => {
+//   if(err){
+//     console.error(err)
+//   }else{
+//     console.log("connection was successful")
+//   }
+
+// })
+
 
 const apiRouter = require('./routes/api');
 
@@ -86,10 +97,7 @@ app.use(function(req, res, next) {
 
 app.use(function(req, res, next) {
   if (req.method === 'GET' || req.method === 'POST') {
-    appInsights.defaultClient.trackNodeHttpRequest({
-      request: req,
-      response: res
-    });
+    
   }
 
   res.setHeader('Access-Control-Allow-Origin', '*');

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: data-updater
+data:
+  # property-like keys; each key maps to a simple value
+  MONGODB_USER: "myadmin"
+  MONGODB_PASSWORD: "Password1234"
+  UPDATE_INTERVAL: "2"
+  APPINSIGHTS_INSTRUMENTATIONKEY: "bba758ab-1af7-46c3-8aa2-4ab3c7f86ed0"
+  

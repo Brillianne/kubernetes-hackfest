@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: data-updater
+  name: data-updater
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-updater
+  template:
+    metadata:
+      labels:
+        app: data-updater
+    spec:
+      containers:
+      - image: acrpetclinic536f0e.azurecr.io/data-updater:latest
+        name: data-updater
+        env:
+        - name: MONGODB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: data-updater
+              key: MONGODB_USER
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: data-updater
+              key: MONGODB_PASSWORD
+        - name: UPDATE_INTERVAL
+          valueFrom:
+            configMapKeyRef:
+              name: data-updater
+              key: UPDATE_INTERVAL
+        - name: APPINSIGHTS_INSTRUMENTATIONKEY
+          valueFrom:
+            configMapKeyRef:
+              name: data-updater
+              key: APPINSIGHTS_INSTRUMENTATIONKEY
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+
+   
+   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: data-updater
+  name: data-updater
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: data-updater
+  type: LoadBalancer

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: weather-api
+data:
+  # property-like keys; each key maps to a simple value
+  APPINSIGHTS_INSTRUMENTATIONKEY: "bba758ab-1af7-46c3-8aa2-4ab3c7f86ed0"

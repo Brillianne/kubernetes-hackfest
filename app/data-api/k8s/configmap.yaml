@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: data-api
+data:
+  # property-like keys; each key maps to a simple value
+  CONFIG_SERVER_URL: "mongodb+srv://myadmin:Password1234@apisdb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+  APPINSIGHTS_INSTRUMENTATIONKEY: "bba758ab-1af7-46c3-8aa2-4ab3c7f86ed0"

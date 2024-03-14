@@ -3,6 +3,7 @@
   "version": "0.0.5",
   "private": true,
   "scripts": {
+    "start:dev": "node ./bin/www",
     "local": "NODE_ENV=local node ./bin/www",
     "dev": "NODE_ENV=dev node ./bin/www",
     "container": "NODE_ENV=contaimer node ./bin/www"

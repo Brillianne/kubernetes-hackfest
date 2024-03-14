@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: data-api
+  name: data-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-api
+  template:
+    metadata:
+      labels:
+        app: data-api
+    spec:
+      containers:
+      - image: acrpetclinic536f0e.azurecr.io/data-api:latest
+        name: data-api
+        env:
+        - name: CONFIG_SERVER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: data-api
+              key: CONFIG_SERVER_URL
+        - name: APPINSIGHTS_INSTRUMENTATIONKEY
+          valueFrom:
+            configMapKeyRef:
+              name: data-api
+              key: APPINSIGHTS_INSTRUMENTATIONKEY
+          
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3009
+   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: data-api
+  name: data-api
+spec:
+  ports:
+  - port: 3009
+    protocol: TCP
+    targetPort: 3009
+  selector:
+    app: data-api
+  type: LoadBalancer

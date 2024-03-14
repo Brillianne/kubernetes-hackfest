@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: quakes-api
+  name: quakes-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quakes-api
+  template:
+    metadata:
+      labels:
+        app: quakes-api
+    spec:
+      containers:
+      - image: acrpetclinic536f0e.azurecr.io/quakes-api:latest
+        name: quakes-api
+        env:
+        - name: APPINSIGHTS_INSTRUMENTATIONKEY
+          valueFrom:
+            configMapKeyRef:
+              name: quakes-api
+              key: APPINSIGHTS_INSTRUMENTATIONKEY
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3012
+       
+   
+   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: quakes-api
+  name: quakes-api
+spec:
+  ports:
+  - port: 3012
+    protocol: TCP
+    targetPort: 3012
+  selector:
+    app: quakes-api
+  type: LoadBalancer

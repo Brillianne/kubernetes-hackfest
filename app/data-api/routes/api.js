@@ -51,6 +51,7 @@ router.get('/get/flights/:timestamp', (req, res, next) => {
   });
 });
 
+
 router.get('/get/quakes/:timestamp', (req, res, next) => {
   getDataObjFromDb(Quakes, req.params.timestamp, (err, result) => {
     jsonResponse.json(res, 'success', st.OK.code, result);
